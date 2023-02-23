@@ -21,7 +21,7 @@ const ResultCard: FC<ResultCardProps> = ({
       </div>
 
       <div className={styles.mainContainer}>
-        <h1 className={styles.header}>The result of your convertion is:</h1>
+        <h1 className={styles.header}>The result of your conversion is:</h1>
         {convertedValue !== undefined ? (
           <p>
             {convertedValue.toFixed(2).replace(/[.,]00$/, "")}{" "}

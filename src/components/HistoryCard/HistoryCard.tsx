@@ -1,14 +1,10 @@
 import { FC, ReactElement } from "react";
+import { HistoricalData } from "../../interfaces";
 
 import styles from "./HistoryCard.module.sass";
 
 type HistoryCardProps = {
-  historicalData: {
-    inputValue: number | undefined;
-    convertedValue: number;
-    selectedCurrecyFrom: string;
-    selectedCurrecyTo: string;
-  }[];
+  historicalData: HistoricalData[];
 };
 
 const HistoryCard: FC<HistoryCardProps> = ({

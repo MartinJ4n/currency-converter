@@ -1,4 +1,4 @@
-import { useState, FC, ReactElement } from "react";
+import { FC, ReactElement } from "react";
 
 import Dropdown from "../Dropdown";
 import Input from "../Input/Input";

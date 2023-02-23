@@ -1,5 +1,6 @@
 import { useState, useEffect, FC, ReactElement } from "react";
 import { useFetch } from "../../assets/utils/fetch";
+import { HistoricalData, ExchangeRate } from "../../interfaces";
 
 import InputCard from "../../components/InputCard";
 import ResultCard from "../../components/ResultCard";
@@ -7,17 +8,6 @@ import RecentlyAddedCard from "../../components/RecentlyAddedCard";
 import HistoryCard from "../../components/HistoryCard";
 
 import styles from "./Home.module.sass";
-
-type HistoricalData = {
-  inputValue: number | undefined;
-  convertedValue: number;
-  selectedCurrecyFrom: string;
-  selectedCurrecyTo: string;
-};
-
-type exchangeRate = {
-  [key: string]: number | string;
-};
 
 const Home: FC = (): ReactElement => {
   const { data, isLoading, error } = useFetch(
@@ -38,12 +28,12 @@ const Home: FC = (): ReactElement => {
     },
   ];
 
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>();
   const [inputValue, setInputValue] = useState<number | undefined>();
   const [convertedValue, setConvertedValue] = useState<number | undefined>();
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
   const [currenciesFrom, setCurrenciesFrom] = useState(defaultCurrencies);
   const [currenciesTo, setCurrenciesTo] = useState(defaultCurrencies);
-  const [exchangeRates, setExchangeRates] = useState<exchangeRate[]>();
 
   const selectedCurrecyFrom = currenciesFrom.find(
     ({ selected }) => selected === true
@@ -53,42 +43,54 @@ const Home: FC = (): ReactElement => {
   )!.name;
 
   /**
-   *
+   * Processing data and filling up the Dropdowns and ExchangeRates
    */
   useEffect(() => {
     if (data !== null) {
-      const mostRelevantData = data[0];
-      console.log(mostRelevantData);
+      const modifiedData = handleDataTransformation(data);
 
-      //@ts-ignore
-      delete mostRelevantData.Date;
-      //@ts-ignore
-      for (const element in mostRelevantData) {
-        if (
-          mostRelevantData[element] === "N/A" ||
-          mostRelevantData[element] === ""
-        ) {
-          delete mostRelevantData[element];
-        }
-      }
-
-      const dataArray = Object.keys(mostRelevantData).map((key, index) => {
+      const dataArray = Object.keys(modifiedData).map((key, index) => {
         const selected = index === 0 ? true : false;
         return { name: key, selected };
       });
 
-      // console.log(dataArray);
-
-      // setCurrenciesFrom(dataArray);
       setCurrenciesTo(dataArray);
-      setExchangeRates(mostRelevantData);
-      console.log("trigger");
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data !== null) {
+      const modifiedData = handleDataTransformation(data);
+
+      const dataArray = Object.keys(modifiedData).map((key, index) => {
+        const selected = index === 0 ? true : false;
+        return { name: key, selected };
+      });
+
+      setCurrenciesFrom(dataArray);
+      setExchangeRates(modifiedData);
     }
   }, [data]);
 
   /**
    * Custom handlers:
    */
+  const handleDataTransformation = (data: any) => {
+    const mostRelevantData = data[0];
+    //@ts-ignore
+    delete mostRelevantData.Date;
+    //@ts-ignore
+    for (const element in mostRelevantData) {
+      if (
+        mostRelevantData[element] === "N/A" ||
+        mostRelevantData[element] === ""
+      ) {
+        delete mostRelevantData[element];
+      }
+    }
+    return mostRelevantData;
+  };
+
   const handleCurrencySelectionFrom = (currency: string) => {
     const updatedCurrencies = [...currenciesFrom];
 
@@ -145,6 +147,28 @@ const Home: FC = (): ReactElement => {
   };
 
   const handleConvertionRecovery = (historicalData: HistoricalData) => {
+    const updatedCurrenciesFrom = [...currenciesFrom];
+    const updatedCurrenciesTo = [...currenciesTo];
+
+    for (const element of updatedCurrenciesFrom) {
+      element.selected = false;
+    }
+    for (const element of updatedCurrenciesTo) {
+      element.selected = false;
+    }
+
+    const indexFrom = updatedCurrenciesFrom.findIndex(
+      ({ name }) => name === historicalData.selectedCurrecyFrom
+    );
+    const indexTo = updatedCurrenciesFrom.findIndex(
+      ({ name }) => name === historicalData.selectedCurrecyTo
+    );
+
+    updatedCurrenciesFrom[indexFrom].selected = true;
+    updatedCurrenciesTo[indexTo].selected = true;
+    setCurrenciesFrom(updatedCurrenciesFrom);
+    setCurrenciesTo(updatedCurrenciesTo);
+
     setInputValue(historicalData.inputValue);
     setConvertedValue(historicalData.convertedValue);
   };

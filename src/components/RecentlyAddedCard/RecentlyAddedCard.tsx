@@ -1,20 +1,11 @@
 import { FC, ReactElement } from "react";
+import { HistoricalData } from "../../interfaces";
 
 import styles from "./RecentlyAddedCard.module.sass";
 
 type RecentlyAddedCardProps = {
-  historicalData: {
-    inputValue: number | undefined;
-    convertedValue: number;
-    selectedCurrecyFrom: string;
-    selectedCurrecyTo: string;
-  }[];
-  onConvertionRecovery: (historicalData: {
-    inputValue: number | undefined;
-    convertedValue: number;
-    selectedCurrecyFrom: string;
-    selectedCurrecyTo: string;
-  }) => void;
+  historicalData: HistoricalData[];
+  onConvertionRecovery: (historicalData: HistoricalData) => void;
 };
 
 const RecentlyAddedCard: FC<RecentlyAddedCardProps> = ({
