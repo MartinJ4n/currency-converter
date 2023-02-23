@@ -1,49 +1,37 @@
-import { FC, ReactElement, KeyboardEvent } from "react";
+import { FC, ReactElement } from "react";
 
-import { Wrapper, InputSC } from "./styles";
+import styles from "./Input.module.sass";
 
 interface InputProps {
   value: number;
   name: string;
   type: string;
   category: string;
-  label?: string;
-  width?: string;
-  height?: string;
   placeholder?: string;
   disabled?: boolean;
   onChange: (value: number) => void;
-  onKeyPress?: (e: KeyboardEvent) => void;
 }
 
 const Input: FC<InputProps> = ({
   value,
   name,
   type,
-  label,
-  width = "100%",
-  height = "48px",
   placeholder = "...",
   disabled = false,
   onChange,
-  onKeyPress,
 }): ReactElement => {
   return (
-    <Wrapper>
-      {label && <label htmlFor={name}>{label}</label>}
-      <InputSC
+    <div className={styles.wrapper}>
+      <input
         value={value}
         name={name}
         type={type}
-        width={width}
-        height={height}
         placeholder={placeholder}
         disabled={disabled}
-        //@ts-ignore
-        onChange={(e) => onChange(e.target.value)}
-        onKeyPress={onKeyPress ? (e) => onKeyPress(e) : undefined}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className={styles.input}
       />
-    </Wrapper>
+    </div>
   );
 };
 
