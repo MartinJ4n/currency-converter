@@ -23,7 +23,7 @@ const ResultCard: FC<ResultCardProps> = ({
       <div className={styles.mainContainer}>
         <h1 className={styles.header}>The result of your conversion is:</h1>
         {convertedValue !== undefined ? (
-          <p>
+          <p data-cy="convertionResult">
             {convertedValue.toFixed(2).replace(/[.,]00$/, "")}{" "}
             {selectedCurrecyTo}
           </p>

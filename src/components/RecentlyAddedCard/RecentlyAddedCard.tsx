@@ -31,7 +31,7 @@ const RecentlyAddedCard: FC<RecentlyAddedCardProps> = ({
               key={index}
               onClick={() => onConvertionRecovery(data)}
             >
-              <p>
+              <p data-cy="recentlyAddedResults">
                 {data.inputValue}
                 {data.selectedCurrecyFrom} ➡️{" "}
                 {data.convertedValue.toFixed(2).replace(/[.,]00$/, "")}

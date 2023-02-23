@@ -27,12 +27,13 @@ const Dropdown: FC<DropdownProps> = ({
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-cy="dropdown">
       <div className={styles.dropdownItem} onClick={handleSelectionToggle}>
         <p>{currencies.find(({ selected }) => selected === true)?.name}</p>
       </div>
 
       <motion.div
+        data-cy="dropdownBox"
         animate={{ height: selectionToggle ? "300px" : 0 }}
         transition={{ duration: 0.2 }}
         className={styles.dropdownBox}

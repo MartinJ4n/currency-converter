@@ -42,7 +42,7 @@ const InputCard: FC<InputCardProps> = ({
 
       <div className={styles.mainContainer}>
         <div className={styles.description}>
-          <p>Currency Converter 💰</p>
+          <p data-cy="header">Currency Converter 💰</p>
           <p>
             A currency converter is a helpful tool that allows you to quickly
             and easily convert one currency to another. <br /> With a two
@@ -72,6 +72,7 @@ const InputCard: FC<InputCardProps> = ({
           <div>
             <p>Convert From:</p>
             <Dropdown
+              data-cy="convertFrom"
               currencies={currenciesFrom}
               onCurrencySelection={onCurrencySelectionFrom}
             />
@@ -79,11 +80,13 @@ const InputCard: FC<InputCardProps> = ({
           <div>
             <p>Convert To:</p>
             <Dropdown
+              data-cy="convertTo"
               currencies={currenciesTo}
               onCurrencySelection={onCurrencySelectionTo}
             />
           </div>
           <button
+            data-cy="convertButton"
             className={styles.button}
             onClick={() =>
               onConvertCurrency(

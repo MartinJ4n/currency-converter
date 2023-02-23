@@ -23,6 +23,7 @@ const Input: FC<InputProps> = ({
   return (
     <div className={styles.wrapper}>
       <input
+        data-cy="amountInput"
         value={value}
         name={name}
         type={type}

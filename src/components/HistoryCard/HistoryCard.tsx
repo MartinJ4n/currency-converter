@@ -34,7 +34,7 @@ const HistoryCard: FC<HistoryCardProps> = ({
               index
             ) => (
               <div className={styles.detailsBox} key={index}>
-                <p>
+                <p data-cy="historyResults">
                   - {inputValue}
                   {selectedCurrecyFrom} ➡️{" "}
                   {convertedValue.toFixed(2).replace(/[.,]00$/, "")}
