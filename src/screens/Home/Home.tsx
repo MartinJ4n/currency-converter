@@ -28,7 +28,7 @@ const Home: FC = (): ReactElement => {
     },
   ];
 
-  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>();
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRate>();
   const [inputValue, setInputValue] = useState<number | undefined>();
   const [convertedValue, setConvertedValue] = useState<number | undefined>();
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
@@ -75,11 +75,9 @@ const Home: FC = (): ReactElement => {
   /**
    * Custom handlers:
    */
-  const handleDataTransformation = (data: any) => {
+  const handleDataTransformation = (data: ExchangeRate[]) => {
     const mostRelevantData = data[0];
-    //@ts-ignore
     delete mostRelevantData.Date;
-    //@ts-ignore
     for (const element in mostRelevantData) {
       if (
         mostRelevantData[element] === "N/A" ||
@@ -88,6 +86,7 @@ const Home: FC = (): ReactElement => {
         delete mostRelevantData[element];
       }
     }
+
     return mostRelevantData;
   };
 
@@ -122,10 +121,8 @@ const Home: FC = (): ReactElement => {
   };
 
   const handleConvertCurrency = (amount: number, from: string, to: string) => {
-    //@ts-ignore
-    const exchangeRateFrom = exchangeRates[from];
-    //@ts-ignore
-    const exchangeRateTo = exchangeRates[to];
+    const exchangeRateFrom = exchangeRates![from];
+    const exchangeRateTo = exchangeRates![to];
 
     if (!exchangeRateFrom || !exchangeRateTo) {
       throw new Error("Invalid currency code");
@@ -133,6 +130,7 @@ const Home: FC = (): ReactElement => {
 
     const convertedValue =
       (amount * Number(exchangeRateTo)) / Number(exchangeRateFrom);
+
     setConvertedValue(convertedValue);
 
     const historyPackage = {
@@ -143,6 +141,7 @@ const Home: FC = (): ReactElement => {
     };
     const updatedHistoricalData = [...historicalData];
     updatedHistoricalData.push(historyPackage);
+
     setHistoricalData(updatedHistoricalData);
   };
 
