@@ -4,12 +4,12 @@ import { HistoricalData } from "../../interfaces";
 import styles from "./RecentlyAddedCard.module.sass";
 
 type RecentlyAddedCardProps = {
-  historicalData: HistoricalData[];
+  recentlyAddedData: HistoricalData[];
   onConvertionRecovery: (historicalData: HistoricalData) => void;
 };
 
 const RecentlyAddedCard: FC<RecentlyAddedCardProps> = ({
-  historicalData,
+  recentlyAddedData,
   onConvertionRecovery,
 }): ReactElement => {
   return (
@@ -24,8 +24,8 @@ const RecentlyAddedCard: FC<RecentlyAddedCardProps> = ({
       <div className={styles.mainContainer}>
         <h1 className={styles.header}>Recently Added:</h1>
 
-        {historicalData.length !== 0 ? (
-          historicalData.map((data, index) => (
+        {recentlyAddedData.length !== 0 ? (
+          recentlyAddedData.map((data, index) => (
             <div
               className={styles.detailsBox}
               key={index}

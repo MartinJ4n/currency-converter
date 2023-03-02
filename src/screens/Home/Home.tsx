@@ -1,5 +1,6 @@
 import { useState, useEffect, FC, ReactElement } from "react";
 import { useFetch } from "../../assets/utils/fetch";
+import { useCookies } from "react-cookie";
 import { HistoricalData, ExchangeRate } from "../../interfaces";
 
 import InputCard from "../../components/InputCard";
@@ -32,8 +33,12 @@ const Home: FC = (): ReactElement => {
   const [inputValue, setInputValue] = useState<number | undefined>();
   const [convertedValue, setConvertedValue] = useState<number | undefined>();
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
+  const [recentlyAddedData, setRecentlyAddedData] = useState<HistoricalData[]>(
+    []
+  );
   const [currenciesFrom, setCurrenciesFrom] = useState(defaultCurrencies);
   const [currenciesTo, setCurrenciesTo] = useState(defaultCurrencies);
+  const [cookies, setCookie] = useCookies(["conversionHistory"]);
 
   const selectedCurrecyFrom = currenciesFrom.find(
     ({ selected }) => selected === true
@@ -71,6 +76,15 @@ const Home: FC = (): ReactElement => {
       setExchangeRates(modifiedData);
     }
   }, [data]);
+
+  /**
+   * Recover history from cookies
+   */
+  useEffect(() => {
+    if (cookies.conversionHistory) {
+      setHistoricalData(cookies.conversionHistory);
+    }
+  }, []);
 
   /**
    * Custom handlers:
@@ -141,8 +155,12 @@ const Home: FC = (): ReactElement => {
     };
     const updatedHistoricalData = [...historicalData];
     updatedHistoricalData.push(historyPackage);
+    const updatedRecentlyAddedData = [...recentlyAddedData];
+    updatedRecentlyAddedData.push(historyPackage);
 
     setHistoricalData(updatedHistoricalData);
+    setRecentlyAddedData(updatedRecentlyAddedData);
+    setCookie("conversionHistory", JSON.stringify(updatedHistoricalData));
   };
 
   const handleConvertionRecovery = (historicalData: HistoricalData) => {
@@ -202,7 +220,7 @@ const Home: FC = (): ReactElement => {
 
         <div className={styles.detailsContainer}>
           <RecentlyAddedCard
-            historicalData={historicalData}
+            recentlyAddedData={recentlyAddedData}
             onConvertionRecovery={handleConvertionRecovery}
           />
           <HistoryCard historicalData={historicalData} />
